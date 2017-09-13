@@ -21,7 +21,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <selectedPolarisations>${polarization}</selectedPolarisations>
-      <sourceBands>i_${polarization},q_${polarization}</sourceBands>
+      <sourceBands>i_${polarization},q_${polarization},Intensity_${polarization}</sourceBands>
       <bandNamePattern/>
     </parameters>
   </node>
@@ -32,7 +32,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <selectedPolarisations>${polarization}</selectedPolarisations>
-      <sourceBands>i_${polarization},q_${polarization}</sourceBands>
+      <sourceBands>i_${polarization},q_${polarization},Intensity_${polarization}</sourceBands>
       <bandNamePattern/>
     </parameters>
   </node>
@@ -45,7 +45,7 @@
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <masterBands/>
       <sourceBands/>
-      <resamplingType>${resamplingType}</resamplingType>
+      <resamplingType>NONE</resamplingType>
       <extent>Master</extent>
       <initialOffsetMethod>Orbit</initialOffsetMethod>
     </parameters>
@@ -84,7 +84,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <rmsThreshold>0.05</rmsThreshold>
-      <warpPolynomialOrder>3</warpPolynomialOrder>
+      <warpPolynomialOrder>1</warpPolynomialOrder>
       <interpolationMethod>Cubic convolution (6 points)</interpolationMethod>
       <demRefinement/>
       <demName/>
@@ -103,7 +103,7 @@
       <srpNumberPoints>501</srpNumberPoints>
       <orbitDegree>3</orbitDegree>
       <includeCoherence>true</includeCoherence>
-      <cohWinAz>18</cohWinAz>
+      <cohWinAz>10</cohWinAz>
       <cohWinRg>10</cohWinRg>
       <squarePixel>true</squarePixel>
     </parameters>

@@ -78,6 +78,9 @@ function main() {
   local_master="$( ciop-copy -U -o ${TMPDIR} ${online_resource} )"
   [[ -z ${local_master} ]] && return ${ERR_NO_MASTER} 
 
+  identifier="$( opensearch-client ${master} identifier )"
+  local_master_xml=$( tar xvfz ${local_master} | grep "${identifier}.xml" )
+
   ciop-log "INFO" "(3 of ${num_steps}) Retrieve slave"
  
   ciop-log "INFO" "Retrieve ${slave}"
@@ -86,14 +89,17 @@ function main() {
 
   local_slave="$( ciop-copy -U -o ${TMPDIR} ${online_resource} )"
   [[ -z ${local_slave} ]] && return ${ERR_NO_SLAVE}
+
+  identifier="$( opensearch-client ${slave} identifier )"
+  local_slave_xml=$( tar xvfz ${local_slave} | grep "${identifier}.xml" )
  
   out=${local_master}_result
 
   ciop-log "INFO" "(4 of ${num_steps}) Invoke SNAP GPT"
 
   gpt ${SNAP_REQUEST} \
-    -Pin1=${local_master} \
-    -Pin2=${local_slave} \
+    -Pin1=${local_master_xml} \
+    -Pin2=${local_slave_xml} \
     -Pout=${out} \
     -p ${TMPDIR}/snap.params 1>&2 || return ${ERR_SNAP} 
 
