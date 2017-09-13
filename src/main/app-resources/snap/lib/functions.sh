@@ -68,25 +68,25 @@ function main() {
 
   cd ${TMPDIR}
 
-  num_steps=7
+  num_steps=8
 
-  ciop-log "INFO" "(1 of ${num_steps}) Resolve RS2 master online resource"
+  ciop-log "INFO" "(1 of ${num_steps}) Resolve TerraSAR-X master online resource"
   online_resource="$( opensearch-client ${master} enclosure )"
   [[ -z ${online_resource} ]] && return ${ERR_NO_URL}
 
-  ciop-log "INFO" "(2 of ${num_steps}) Retrieve RS2 master product from ${online_resource}"
+  ciop-log "INFO" "(2 of ${num_steps}) Retrieve TerraSAR-X master product from ${online_resource}"
   local_master="$( ciop-copy -U -o ${TMPDIR} ${online_resource} )"
   [[ -z ${local_master} ]] && return ${ERR_NO_MASTER} 
 
   identifier="$( opensearch-client ${master} identifier )"
   local_master_xml=$( tar xvfz ${local_master} | grep "${identifier}.xml" )
 
-  ciop-log "INFO" "(3 of ${num_steps}) Retrieve slave"
+  ciop-log "INFO" "(3 of ${num_steps}) Resolve TerraSAR-X slave online resource"
  
-  ciop-log "INFO" "Retrieve ${slave}"
   online_resource="$( opensearch-client ${slave} enclosure )"
   [[ -z ${online_resource} ]] && return ${ERR_NO_URL}
 
+  ciop-log "INFO" "(4 of ${num_steps}) Retrieve TerraSAR-X slave product from ${online_resource}"
   local_slave="$( ciop-copy -U -o ${TMPDIR} ${online_resource} )"
   [[ -z ${local_slave} ]] && return ${ERR_NO_SLAVE}
 
@@ -95,7 +95,7 @@ function main() {
  
   out=${local_master}_result
 
-  ciop-log "INFO" "(4 of ${num_steps}) Invoke SNAP GPT"
+  ciop-log "INFO" "(5 of ${num_steps}) Invoke SNAP GPT"
 
   gpt ${SNAP_REQUEST} \
     -Pin1=${local_master_xml} \
@@ -103,13 +103,13 @@ function main() {
     -Pout=${out} \
     -p ${TMPDIR}/snap.params 1>&2 || return ${ERR_SNAP} 
 
-  ciop-log "INFO" "(5 of ${num_steps}) Compress results"  
+  ciop-log "INFO" "(6 of ${num_steps}) Compress results"  
   tar -C ${TMPDIR} -czf ${out}.tgz $( basename ${out}).dim $( basename ${out}).data || return ${ERR_COMPRESS}
   ciop-publish -m ${out}.tgz || return ${ERR_PUBLISH}  
  
   rm -fr ${out}.tgz
  
-  ciop-log "INFO" "(6 of ${num_steps}) Convert to geotiff and PNG image formats"
+  ciop-log "INFO" "(7 of ${num_steps}) Convert to geotiff and PNG image formats"
   
   # Convert to GeoTIFF
   for img in $( find ${out}.data -name '*.img' )
@@ -133,7 +133,7 @@ function main() {
  
   done
   
-  ciop-log "INFO" "(7 of ${num_steps}) Clean up" 
+  ciop-log "INFO" "(8 of ${num_steps}) Clean up" 
   # clean-up
   rm -fr ${out}*
   
