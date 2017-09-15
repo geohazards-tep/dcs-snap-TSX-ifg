@@ -28,7 +28,7 @@
       </defaultJobconf>
     </jobTemplate>
   </jobTemplates>
-  <workflow id="dcs-snap-TSX-ifg" title="SNAP application" abstract="SNAP application">
+  <workflow id="dcs-snap-TSX-ifg" title="TerraSAR-X interferogram generation with SNAP" abstract="TerraSAR-X interferogram generation with SNAP">
     <workflowVersion>1.0</workflowVersion>
     <node id="snap">
       <job id="snap"/>
