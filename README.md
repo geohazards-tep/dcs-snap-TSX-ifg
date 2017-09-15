@@ -1,4 +1,4 @@
-## Developer Cloud Sandbox <app-name> application  
+## Developer Cloud Sandbox for TerraSAR-X interferogram generation with SNAP
 
 Put here an introductory text describing the application.
 
