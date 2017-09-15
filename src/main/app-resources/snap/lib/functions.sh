@@ -80,6 +80,7 @@ function main() {
 
   identifier="$( opensearch-client ${master} identifier )"
   local_master_xml=$( tar xvfz ${local_master} | grep "${identifier}.xml" )
+  rm -f ${local_master}
 
   ciop-log "INFO" "(3 of ${num_steps}) Resolve TerraSAR-X slave online resource"
  
@@ -92,8 +93,9 @@ function main() {
 
   identifier="$( opensearch-client ${slave} identifier )"
   local_slave_xml=$( tar xvfz ${local_slave} | grep "${identifier}.xml" )
- 
-  out=${local_master}_result
+  rm -f ${local_slave} 
+
+  out=${TMPDIR}/TSX_IFG
 
   ciop-log "INFO" "(5 of ${num_steps}) Invoke SNAP GPT"
 
@@ -102,6 +104,9 @@ function main() {
     -Pin2=${local_slave_xml} \
     -Pout=${out} \
     -p ${TMPDIR}/snap.params 1>&2 || return ${ERR_SNAP} 
+
+  rm -fr $( dirname ${local_master_xml} )
+  rm -fr $( dirname ${local_slave_xml} ) 
 
   ciop-log "INFO" "(6 of ${num_steps}) Compress results"  
   tar -C ${TMPDIR} -czf ${out}.tgz $( basename ${out}).dim $( basename ${out}).data || return ${ERR_COMPRESS}
